@@ -1,0 +1,8 @@
+mode: set
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:23.31,28.15 3 1
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:32.2,35.4 2 1
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:28.15,30.3 1 0
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:37.31,39.2 1 1
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:41.30,43.2 1 1
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:45.29,53.2 6 1
+/Users/aarti.st/go/src/awesomeProject2/gin_testing/main.go:55.13,58.2 2 0

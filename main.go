@@ -42,44 +42,14 @@ func HomePage(c *gin.Context){
 	c.String(200,"Pong")
 }
 
-func Authenticate(c *gin.Context) {
-	user := c.MustGet(gin.AuthUserKey).(string)
-
-	if secret, ok := secrets[user]; ok {
-		c.JSON(http.StatusOK, gin.H{"user": user, "secret": secret})
-	} else {
-		c.JSON(http.StatusOK, gin.H{"user": user, "secret": "NO SECRET :("})
-	}
-}
-
 func setupAPI() *gin.Engine {
 	r := gin.Default()
 	api := r.Group("/api")
-
-	//authorized := r.Group("/admin", gin.BasicAuth(gin.Accounts{
-	//	"foo" : "bar",
-	//}))
-	//
-	////authorized.GET("/secrets", Authenticate)
-	//authorized.GET("/secrets", func(c *gin.Context) {
-	//	// get user, it was set by the BasicAuth middleware
-	//	user := c.MustGet(gin.AuthUserKey).(string)
-	//	if secret, ok := secrets[user]; ok {
-	//		c.JSON(http.StatusOK, gin.H{"user": user, "secret": secret})
-	//	} else {
-	//		c.JSON(http.StatusOK, gin.H{"user": user, "secret": "NO SECRET :("})
-	//	}
-	//})
 
 	api.GET("/orders",GetOrders)
 	api.GET("/", HomePage)
 	api.POST("/PostOrder",PostOrder)
 	return r
-}
-
-
-var secrets = gin.H{
-	"foo":    gin.H{"name": "rt", "phone": "gin"},
 }
 
 func main() {
