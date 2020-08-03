@@ -1,37 +1,59 @@
 package main
+
 import (
+	"bytes"
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
-func performRequest(r http.Handler, method, path string) *httptest.ResponseRecorder {
-	req, _ := http.NewRequest(method, path, nil)
+
+func TestPingRoute(t *testing.T) {
+	router := setupAPI()
+
 	w := httptest.NewRecorder()
-	r.ServeHTTP(w, req)
-	return w
+	req, _ := http.NewRequest("GET", "/api/", nil)
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, 200, w.Code)
+	assert.Equal(t, "Pong", w.Body.String())
+
+	router.ServeHTTP(w, req)
+
 }
-func TestHelloWorld(t *testing.T) {
-	// Build our expected body
-	body := gin.H{
-		"hello": "world",
+func TestOrdersFunc(t *testing.T){
+	router := setupAPI()
+	w := httptest.NewRecorder()
+
+	req, err := http.NewRequest("GET","/api/orders",nil)
+
+	if err!=nil{
+		panic(err)
 	}
-	// Grab our router
-	router := SetupRouter()
-	// Perform a GET request with that handler.
-	w := performRequest(router, "GET", "/")
-	// Assert we encoded correctly,
-	// the request gives a 200
-	assert.Equal(t, http.StatusOK, w.Code)
-	// Convert the JSON response to a map
-	var response map[string]string
-	err := json.Unmarshal([]byte(w.Body.String()), &response)
-	// Grab the value & whether or not it exists
-	value, exists := response["hello"]
-	// Make some assertions on the correctness of the response.
-	assert.Nil(t, err)
-	assert.True(t, exists)
-	assert.Equal(t, body["hello"], value)
+
+	router.ServeHTTP(w, req)
+}
+
+func TestPostOrder(t *testing.T) {
+	router := setupAPI()
+	w := httptest.NewRecorder()
+
+	order := &Order{
+		OrderId: 101,
+		CustomerName: "rt",
+		OrderReview: "good",
+	}
+	jsonOrder, _ := json.Marshal(order)
+
+	req, err := http.NewRequest("POST","/api/PostOrder",bytes.NewBuffer(jsonOrder))
+
+	response := httptest.NewRecorder()
+	if err != nil{
+		panic(err)
+	}
+	assert.Equal(t, 200, response.Code, "OK response is expected")
+
+	router.ServeHTTP(w, req)
 }
